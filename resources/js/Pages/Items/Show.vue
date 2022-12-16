@@ -13,6 +13,12 @@ function nl2br(str) {
   return res;
 }
 
+const deleteItem = (id) => {
+  Inertia.delete( route('items.destroy',{item : id}) ,
+  {
+    onBefore : () => confirm('本当に削除しますか？'),
+  });
+};
 
 </script>
 
@@ -61,6 +67,9 @@ function nl2br(str) {
                               </div>
                               <div class="p-2 w-full">
                                 <Link class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" as="button" :href="route('items.edit',{item :item.id})">編集する</Link>
+                              </div>
+                              <div class="p-2 w-full">
+                                <button @click="deleteItem(item.id)">削除する</button>
                               </div>
                             </div>
                           </div>

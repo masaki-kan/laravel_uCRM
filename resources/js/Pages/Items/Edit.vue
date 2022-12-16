@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia'
 import { reactive } from '@vue/reactivity';
 
@@ -21,12 +21,6 @@ const updateItem = (id) => {
   Inertia.put( route('items.update',{item : id}),form);
 };
 
-const deleteItem = (id) => {
-  Inertia.delete( route('items.destroy',{item : id}) ,
-  {
-    onBefore : () => confirm('本当に削除しますか？');
-  });
-};
 </script>
 
 <template>
@@ -84,9 +78,6 @@ const deleteItem = (id) => {
                         </div>
                         <div class="p-2 w-full">
                           <button type="submit" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">更新する</button>
-                        </div>
-                        <div class="p-2 w-full">
-                          <button type="submit" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">削除する</button>
                         </div>
                       </div>
                     </div>

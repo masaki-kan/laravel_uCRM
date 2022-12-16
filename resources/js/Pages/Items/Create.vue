@@ -15,7 +15,9 @@ const form = reactive({
 })
 
 const storeItem = () => {
-  Inertia.post('/items',form);
+  Inertia.post('/items',form),{
+    _token: this.$page.props.csrf_token, //scrf対策
+  };
 }
 
 </script>

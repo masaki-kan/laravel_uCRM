@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InertiaTestController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -54,5 +55,6 @@ Route::middleware('auth')->group(function () {
  * php artisan route:listで表示できていればok　
  **/
 Route::resource('items', ItemController::class)->middleware(['auth', 'verified']);
+Route::resource('customer', CustomerController::class)->middleware(['auth', 'verified']);
 
 require __DIR__ . '/auth.php';
