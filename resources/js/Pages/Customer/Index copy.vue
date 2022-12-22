@@ -23,7 +23,7 @@ defineProps({
                         <div class="container px-5 py-24 mx-auto">
                             <FlashMessage />
                             <div class="flex pl-4 pb-4 lg:w-2/3 w-full mx-auto">
-                                <Link as="button" :href="route('customer.create')" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">顧客登録</Link>
+                                <Link as="button" :href="route('customers.create')" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">顧客登録</Link>
                             </div>
                             <div class="lg:w-2/3 w-full mx-auto overflow-auto">
                                 <table class="table-auto w-full text-left whitespace-no-wrap">
@@ -39,7 +39,7 @@ defineProps({
                                     <tbody>
                                     <tr v-for="customer in customers" :key="customer.id">
                                         <td class="px-4 py-3">{{customer.id}}</td>
-                                        <td class="px-4 py-3"><Link :href="route('customer.show',{ id :customer.id})" >{{customer.name}}</Link></td>
+                                        <td class="px-4 py-3"><Link :href="route('customers.show',{ id :customer.id})" >{{customer.name}}</Link></td>
                                         <td class="px-4 py-3">{{customer.kana}}</td>
                                         <td class="px-4 py-3">{{customer.email}}</td>
                                         <td class="px-4 py-3">{{customer.tel}}</td>

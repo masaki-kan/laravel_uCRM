@@ -11,11 +11,10 @@ defineProps({
   customers : Object
 })
 
-
 const search = ref("");
 
 const searchCustomers = () => {
-  Inertia.get(route('customer.index',{ search : search.value }) )
+  Inertia.get(route('customers.index',{ search : search.value }) )
 }
 
 
@@ -36,7 +35,7 @@ const searchCustomers = () => {
                         <div class="container px-5 py-24 mx-auto">
                             <FlashMessage />
                             <div class="flex pl-4 pb-4 lg:w-2/3 w-full mx-auto">
-                                <Link as="button" :href="route('customer.create')" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">顧客登録</Link>
+                                <Link as="button" :href="route('customers.create')" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">顧客登録</Link>
                             </div>
                             <div class="lg:w-2/3 w-full mx-auto overflow-auto">
                               <div class="mb-6">
@@ -56,7 +55,7 @@ const searchCustomers = () => {
                                     <tbody>
                                     <tr v-for="customer in customers.data" :key="customer.id">
                                         <td class="px-4 py-3">{{customer.id}}</td>
-                                        <td class="px-4 py-3"><Link :href="route('customer.show',{ id :customer.id})" >{{customer.name}}</Link></td>
+                                        <td class="px-4 py-3"><Link :href="route('customers.show',{ id :customer.id})" >{{customer.name}}</Link></td>
                                         <td class="px-4 py-3">{{customer.kana}}</td>
                                         <td class="px-4 py-3">{{customer.email}}</td>
                                         <td class="px-4 py-3">{{customer.tel}}</td>
@@ -64,13 +63,6 @@ const searchCustomers = () => {
                                     </tbody>
                                 </table>
                                 <Paginate class="mt-6" :links="customers.links" />
-                            </div>
-                            <div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto">
-                                <a class="text-indigo-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                                    </svg>
-                                </a>
                             </div>
                         </div>
                     </section>

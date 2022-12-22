@@ -21,6 +21,7 @@ const updateItem = (id) => {
   Inertia.put( route('items.update',{item : id}),form);
 };
 
+
 </script>
 
 <template>
