@@ -9,7 +9,8 @@ const emit = defineEmits(['update:customerId']) //親に渡す
 
 const searchCustomer = async () => { //dbからデータを取得してから下記の処理を走らせる
   try{
-    await axios.get(`/api/searchCustomers/?search=${search.value}`)
+    await axios.get(`/api/searchCustomers/?search=${search.value}`) // inputで入力された値を引数に 
+    //awaitで処理が完了するまで、モダールは表示させない
       .then( res => {
         customers.value = res.data;
       })
@@ -25,7 +26,6 @@ const setCustomer = e => {
   toggleStatus();
 }
 
-
 </script>
 <template>  
   <div v-show="isShow" class="modal" id="modal-1" aria-hidden="true">
@@ -33,7 +33,7 @@ const setCustomer = e => {
       <div class="modal__container w-2/3" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
         <header class="modal__header">
           <h2 class="modal__title" id="modal-1-title">
-            Micromodal
+            顧客検索
           </h2>
           <button @click="toggleStatus" type="button" class="modal__close" aria-label="Close modal" data-micromodal-close></button>
         </header>

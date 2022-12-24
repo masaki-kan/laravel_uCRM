@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
 
         $items = Item::all();
         \App\Models\Customer::factory(1000)->create(); //CustomerFactoryで書いた内容を１０００件作成する
-        Purchase::factory(100)->create()->each(function (Purchase $purchase) use ($items) { //eachは一件ずつ処理
+        Purchase::factory(10000)->create()->each(function (Purchase $purchase) use ($items) { //eachは一件ずつ処理
             $purchase->items()->attach(
                 //attach()を使うと中間テーブルにも値をセットできる
                 // 1~3個のitemをpurchaseにランダムに紐づけ
@@ -36,6 +36,8 @@ class DatabaseSeeder extends Seeder
                 ['quantity' => rand(1, 5)]
             );
         });
+
+
 
         /**
          * item_purchaseのpurchase_idはPurchaseが100件を１件ずつ作成と同時に中間テーブルも作成するので

@@ -42,7 +42,6 @@ const totalPrice = computed(()=>{ //computed()は監視　item.price * item.quan
   } )
 
   return total;
-
 })
 
 const storePurchase = () => {

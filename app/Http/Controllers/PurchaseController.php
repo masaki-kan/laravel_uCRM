@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Item;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use App\Models\Order;
 
 class PurchaseController extends Controller
 {
@@ -19,7 +20,14 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        //
+        // 合計
+        $orders = Order::groupBy('id')->selectRaw('id, customer_name, sum(subtotal) as total, status, created_at')->paginate(50);
+        return Inertia::render(
+            'Purchases/Index',
+            [
+                'orders' => $orders
+            ]
+        );
     }
 
     /**
@@ -50,7 +58,6 @@ class PurchaseController extends Controller
         DB::beginTransaction();
 
         try {
-
             $purchase = Purchase::create(
                 ['customer_id' => $request->customer_id, 'status' => $request->status]
             );
@@ -79,7 +86,15 @@ class PurchaseController extends Controller
      */
     public function show(Purchase $purchase)
     {
-        //
+        //小計
+        $subtotals = Order::where('id', $purchase->id)->get();
+        // 合計
+        $order = Order::groupBy('id')
+            ->where('id', $purchase->id)
+            ->selectRaw('id, customer_name, sum(subtotal) as total, status, created_at')->get();
+
+        // dd($subtotals, $order);
+        return Inertia::render('Purchases/Show', ['items' => $subtotals, 'order' => $order]);
     }
 
     /**
@@ -91,18 +106,69 @@ class PurchaseController extends Controller
     public function edit(Purchase $purchase)
     {
         //
+        $purchase = Purchase::find($purchase->id); // 購買Idで指定
+        $allItems = Item::select('id', 'name', 'price')->get(); // 全商品を取得
+        $items = []; // 空の配列を用意
+
+        // 販売中の商品と中間テーブルを比較し、中間テーブルに数量があれば数量を取 得、なければ0で設定
+        foreach ($allItems as $allItem) {
+            $quantity = 0; // 数量初期値 0
+            foreach ($purchase->items as $item) { // 中間先のテーブルを1件ずつチェック
+                if ($allItem->id === $item->id) { // 同じidがあれば
+                    $quantity = $item->pivot->quantity; // 中間テーブルの数量を設定 
+                    array_push($items, [
+                        'id' => $allItem->id,
+                        'name' => $allItem->name,
+                        'price' => $allItem->price,
+                        'quantity' => $quantity
+                    ]);
+                }
+            }
+        }
+        $order = Order::groupBy('id')
+            ->where('id', $purchase->id)
+            ->selectRaw('id, customer_id,customer_name, status, created_at')
+            ->get();
+
+        return Inertia::render('Purchases/Edit', [
+            'itmes' => $items,
+            'order' => $order
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdatePurchaseRequest  $request
-     * @param  \App\Models\Purchase  $purchase
+     * @param  \App\Models\Purchase  $purchasezzzz
      * @return \Illuminate\Http\Response
      */
     public function update(UpdatePurchaseRequest $request, Purchase $purchase)
     {
         //
+        DB::beginTransaction();
+
+        try {
+            $purchase->status = $request->status;
+            $purchase->save();
+
+            $items = [];
+            foreach ($request->items as $item) {
+                $items = $items + [
+                    // item_id => [ 中間テーブルの列名 => 値 ]
+                    $item['id'] => [
+                        'quantity' => $item['quantity']
+                    ]
+                ];
+            }
+
+            //中間テーブルの情報を更新するにはsync()が便利 引数に配列が必要なので事前に作成しておく
+            $purchase->items()->sync($items);
+            DB::commit();
+            return to_route('dashboard');
+        } catch (\Exception $e) { //例外があったとき
+            DB::rollback();
+        }
     }
 
     /**
