@@ -8,6 +8,7 @@ use App\Http\Controllers\CustomerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\AnalysisController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,5 +59,7 @@ Route::middleware('auth')->group(function () {
 Route::resource('items', ItemController::class)->middleware(['auth', 'verified']);
 Route::resource('customers', CustomerController::class)->middleware(['auth', 'verified']);
 Route::resource('purchases', PurchaseController::class)->middleware(['auth', 'verified']);
+Route::get('analysis', [AnalysisController::class, 'index'])->name('analysis');
+
 
 require __DIR__ . '/auth.php';
